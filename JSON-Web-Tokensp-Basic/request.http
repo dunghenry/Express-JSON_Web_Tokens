@@ -1,0 +1,22 @@
+GET http://localhost:4000
+Authorization: Bearer accessToken
+###
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+    "username": "Dung Henry"
+}
+
+###
+POST http://localhost:5000/token
+Content-Type: application/json
+
+{
+    "refreshToken": "refreshToken"
+}
+
+
+###
+DELETE http://localhost:5000/logout
+Authorization: Bearer accessToken
