@@ -22,7 +22,7 @@ const authController = {
       const user = await newUser.save();
       res.status(200).json(user);
     } catch (err) {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     }
   },
 
@@ -53,14 +53,14 @@ const authController = {
     try {
       const user = await User.findOne({ username: req.body.username });
       if (!user) {
-        res.status(404).json("Incorrect username");
+        return res.status(404).json("Incorrect username");
       }
       const validPassword = await bcrypt.compare(
         req.body.password,
         user.password
       );
       if (!validPassword) {
-        res.status(404).json("Incorrect password");
+        return res.status(404).json("Incorrect password");
       }
       if (user && validPassword) {
         //Generate access token
@@ -79,7 +79,7 @@ const authController = {
         res.status(200).json({ ...others, accessToken});
       }
     } catch (err) {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     }
   },
 
@@ -106,7 +106,7 @@ const authController = {
         path: "/",
         sameSite: "strict",
       });
-      res.status(200).json({
+      return res.status(200).json({
         accessToken: newAccessToken,
         refreshToken: newRefreshToken,
       });
@@ -118,7 +118,7 @@ const authController = {
     //Clear cookies when user logs out
     refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
     res.clearCookie("refreshToken");
-    res.status(200).json("Logged out successfully!");
+    return res.status(200).json("Logged out successfully!");
   },
 };
 
